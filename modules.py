@@ -1,3 +1,4 @@
+
 import torch
 from torch.autograd import Variable
 from torch import nn
@@ -90,7 +91,26 @@ class GeneratorNet(torch.nn.Module):
             z = self.Encoder.encode(x)
             result = self.Decoder.decode(z)     
             return result
-
+class DiscriminatorNet_feature(torch.nn.Module):
+    def __init__(self,latent_size=99):
+        super().__init__()
+        self.latent_size=latent_size
+        
+        self.fc1 = nn.Linear(latent_size, latent_size*2)
+        self.fc2 = nn.Linear(latent_size*2, latent_size*4)
+        self.fc3 = nn.Linear(latent_size*4, 10)
+        self.bn1 = nn.BatchNorm1d(latent_size*2, 1.e-3)
+        self.bn2 = nn.BatchNorm1d(latent_size*4, 1.e-3)
+        self.relu = nn.ReLU()
+        self.sigmoid = nn.Sigmoid()
+            
+    def forward(self,x):
+        x=self.relu(self.bn1(self.fc1(x)))
+        x=self.relu(self.bn2(self.fc2(x)))
+        return self.sigmoid(self.fc3(x))
+        
+        
+        
 class DiscriminatorNet_reconstruction(torch.nn.Module):
         def __init__(self,img_channel,img_size):
             self.img_channel=img_channel
@@ -139,9 +159,9 @@ class GeneratorNet(torch.nn.Module):
         self.Decoder=Decoder
         self.out = torch.nn.Tanh()   
     def forward(self, x):
-        x=x.view(-1,self.Encoder.nc,self.Encoder.ndf,self.Encoder.ndf)
-        z = self.Encoder.encode(x)
-        result = self.Decoder.decode(z)
+      #  x=x.view(-1,self.Encoder.nc,self.Encoder.ndf,self.Encoder.ndf)
+        z = self.Encoder.forward(x)
+        result = self.Decoder.forward(z)
         
         return result
 

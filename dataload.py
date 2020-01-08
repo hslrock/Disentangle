@@ -36,7 +36,7 @@ def ConcatenateSample(data):
     df=df.sort_index()
     return df
 def load_image( infilename ):
-    img = Image.open('celeba-dataset\img_align_celeba\img_align_celeba\\'+ infilename )
+    img = Image.open('celeba-dataset/img_align_celeba/'+ infilename )
     return img    
 
 
@@ -53,7 +53,7 @@ class ImageDataset(Dataset):
         if torch.is_tensor(idx):
             idx = idx.tolist()
         image = load_image(self.data.index[idx])
-        image=image.resize((128,128), Image.ANTIALIAS)
+        image=image.resize((64,64), Image.ANTIALIAS)
         image=np.array(image)        
         if self.transform:
             image = self.transform(image)
@@ -81,7 +81,7 @@ class ToTensor(object):
 
 def load_data():
 
-    attribute_path='celeba-dataset\list_attr_celeba.csv'
+    attribute_path='img_data.csv'
     targetfield=["Male","Eyeglasses"]
     attribute_Data=dataGathering(attribute_path,targetfield)
     Male_Glasses = attribute_Data.loc[(attribute_Data['Male'] == 1) & (attribute_Data['Eyeglasses']== 1)] 
