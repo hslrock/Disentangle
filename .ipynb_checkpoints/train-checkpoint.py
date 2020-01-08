@@ -22,14 +22,14 @@ def real_data_target(size):
     '''
     Tensor containing ones, with shape = size
     '''
-    data = torch.ones(size, 1, 16, 16)
+    data = torch.ones(size, 1, 8, 8)
     if torch.cuda.is_available(): return data.cuda()
     return data
 def fake_data_target(size):
     '''
     Tensor containing zeros, with shape = size
     '''
-    data = torch.zeros(size, 1, 16, 16)
+    data = torch.zeros(size, 1, 8, 8)
     if torch.cuda.is_available(): return data.cuda()
     return data
 
@@ -74,7 +74,7 @@ def gloss_calc(optimizer, fake_data,Discriminator):
 
 
 def noise(size):
-    n = torch.randn(size, 3,128,128)
+    n = torch.randn(size, 3,64,64)
     if torch.cuda.is_available(): return n.cuda() 
     return n
 
@@ -120,6 +120,8 @@ def train(num_epochs,Generator,Discriminator,d_optimizer,g_optimizer,train_load)
             fake_data = Generator(noi)#noise(real_batch.size(0)))
             # Train G
             g_error = gloss_calc(g_optimizer, fake_data,Discriminator)
+            
+            
             
             # Display Progress
             if (batch_i) % 100 == 0:
