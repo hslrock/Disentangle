@@ -88,9 +88,11 @@ def load_data():
     Female_Glasses = attribute_Data.loc[(attribute_Data['Male'] == -1) & (attribute_Data['Eyeglasses']== 1)] 
     Male_NonGlasses = attribute_Data.loc[(attribute_Data['Male'] == 1) & (attribute_Data['Eyeglasses']== -1)] 
     Female_NonGlasses = attribute_Data.loc[(attribute_Data['Male'] == -1)& (  attribute_Data['Eyeglasses']== -1)] 
-    transform =transforms.Compose([transforms.ToPILImage(),
-                               transforms.RandomHorizontalFlip(),                              
-                               ToTensor()])  
+    transform =transforms.Compose([
+                                #transforms.ToPILImage(),                         
+                               #transforms.RandomHorizontalFlip(),                         
+                               ToTensor(),
+                                transforms.Normalize(mean=(0.5, 0.5, 0.5), std=(0.5, 0.5, 0.5))])  
     transformed_dataset=ImageDataset(attribute_Data,transform)
     
     return transformed_dataset
