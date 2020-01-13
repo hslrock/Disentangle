@@ -71,4 +71,5 @@ class invphi():
     def entangle(self,z1,z2,z3):
         z=torch.cat((z1,z2,z3),1)
         return self.fc4(self.fc3(z))
-    def
+    def forward(self,x):
+        return x

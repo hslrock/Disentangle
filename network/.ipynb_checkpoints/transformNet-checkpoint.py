@@ -60,4 +60,16 @@ class phi(torch.nn.Module):
         z=self.fc1(x) 
         z1,z2,z3=self.disentangle(z)
         
+class invphi():
+    def __init__(self,nc,nd,channel1,channel2,channel3):
+        super().__init__()
+        self.fc1=nn.Linear(nc, nd)
+        self.fc2=nn.Linear(nd, nc)
+        self.nc=nc
         
+        
+    def entangle(self,z1,z2,z3):
+        z=torch.cat((z1,z2,z3),1)
+        return self.fc4(self.fc3(z))
+    def forward(self,x):
+        return x
