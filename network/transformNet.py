@@ -41,3 +41,34 @@ class BCE_Classification(torch.nn.Module):
         x=self.sigmoid(self.f2(self.f1(x)))
         return x
         
+class phi(torch.nn.Module):
+    def __init__(self,nc,nd,channel1,channel2,channel3):
+        super().__init__()
+        self.fc1=nn.Linear(nc, nd)
+        self.nc=nc
+        self.fcchannel1=nn.Linear(nd,channel1)
+        self.fcchannel2=nn.Linear(nd,channel2)
+        self.fcchannel3=nn.Linear(nd,channel3)
+    def disentangle(self,x):
+        z1=self.fcchannel1(x)
+        z2=self.fcchannel2(x)
+        z3=self.fcchannel3(x)
+            
+        return z1,z2,z3
+    def forward(self,x):
+        x=x.view(-1,self.nc)   
+        z=self.fc1(x) 
+        z1,z2,z3=self.disentangle(z)
+        
+class invphi():
+    def __init__(self,nc,nd,channel1,channel2,channel3):
+        super().__init__()
+        self.fc1=nn.Linear(nc, nd)
+        self.fc2=nn.Linear(nd, nc)
+        self.nc=nc
+        
+        
+    def entangle(self,z1,z2,z3):
+        z=torch.cat((z1,z2,z3),1)
+        return self.fc4(self.fc3(z))
+    def
