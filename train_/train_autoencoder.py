@@ -2,6 +2,7 @@ import torch
 from torch import nn,optim
 import itertools
 from functional.functional import noise_vector
+from eval.eval import eval_generate
 import time
 
 from .loss import reconstruction_loss_ae,adv_img_loss,gen_image_loss,adv_feature_loss,noise_vector
@@ -67,15 +68,18 @@ def train(AE_model,train_load,num_epochs=30,device=None):
                                     dr_optimizer,d_optimizer)
             
             # Display Progress
-            if (batch_i) % 300 == 0:
+            if (batch_i) % 600 == 0:
                 print("Batch: ", batch_i)
                 print("1:Discriminator_Error: ", d_error.item()," Generator_Error: ", g_error.item()," Recons_Error: ",                                recons_loss.item())
                 print("2:Feature Discriminator Error: ",df_error_adv.item(),"Encoder Error: ", en_error_adv.item())
                 print("3 Discriminator_adv_error", d_error1.item(), "Generator_error: ", g_error2.item())
+                eval_generate(Decoder,8)
         t_end = time.time()
+        duration_avg = (t_end - t_start) / (epoch + 1.0)
+        
         print("Elapsed Time: ",duration_avg)
         torch.save(Encoder,'Encoder.h')
         torch.save(Decoder,'Decoder.h')
-        torch.save(Discriminator_feature,'Discriminator.h')
-        torch.save(Discriminator_reconstruct,'Discriminator.h')
+        torch.save(Discriminator_feature,'Discriminator_f.h')
+        torch.save(Discriminator_reconstruct,'Discriminator_r.h')
         
