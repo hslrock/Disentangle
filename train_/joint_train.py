@@ -11,7 +11,8 @@ from .loss import *
 
 def joint_train(model_list,train_load,num_epochs=30,device=None):
     for epoch in range(num_epochs):
-        
+        t_start = time.time()                    
+
         print("Epoch:", epoch)
         #model_list=[Encoder,Decoder,D_reconstruct,D_feature,Phi,Invphi]
         Encoder=model_list[0]
@@ -111,10 +112,11 @@ def joint_train(model_list,train_load,num_epochs=30,device=None):
                 print("5 Reconstruction Loss: ",loss_reconstruction.item())
                 print("6 Cyclic Loss: ",loss_cycle.item())
         t_end = time.time()
+        duration_avg = (t_end - t_start) / (epoch + 1.0)
         print("Elapsed Time: ",duration_avg)
-        torch.save(Encoder,'Encoder.h')
-        torch.save(Decoder,'Decoder.h')
-        torch.save(D_feature,'Discriminator.h')
-        torch.save(D_reconstruct,'Discriminator.h')
-        torch.save(phi,'Phi.h')
-        torch.save(invphi,'invphi.h')
+        torch.save(Encoder,'EncoderF.h')
+        torch.save(Decoder,'DecoderF.h')
+        torch.save(D_feature,'DiscriminatorfF.h')
+        torch.save(D_reconstruct,'DiscriminatorrF.h')
+        torch.save(Phi,'PhiF.h')
+        torch.save(Invphi,'invphiF.h')
